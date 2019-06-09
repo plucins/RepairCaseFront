@@ -1,0 +1,134 @@
+<h1 mat-dialog-title>Add Equipment</h1>
+<div mat-dialog-content>
+
+  <form class="example-form" [formGroup]="equipmentForm">
+
+
+    <mat-accordion class="example-headers-align">
+      <mat-expansion-panel [expanded]="true" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Equipment
+          </mat-panel-title>
+          <mat-panel-description>
+            equipment details
+            <mat-icon>devices</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="form-element">
+          <mat-form-field appearance="outline">
+            <mat-label>Equipment Mark</mat-label>
+            <input required [(ngModel)]="equipmentToRegister.mark" formControlName="eqMark" name="mark" matInput
+                   placeholder="Equipment Mark">
+            <mat-error
+              *ngIf="(equipmentForm.get('eqMark').value == null || equipmentForm.get('eqMark').value == '' )  && equipmentForm.get('eqMark').touched">
+              Equipment Mark is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-element">
+          <mat-form-field appearance="outline">
+            <mat-label>Equipment Model</mat-label>
+            <input required [(ngModel)]="equipmentToRegister.model" formControlName="eqModel" name="model" matInput
+                   placeholder="Equipment Model">
+            <mat-error
+              *ngIf="(equipmentForm.get('eqModel').value == null || equipmentForm.get('eqModel').value == '' )  && equipmentForm.get('eqModel').touched">
+              Equipment Model is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-element">
+          <mat-form-field>
+            <mat-label>Equipment type</mat-label>
+            <mat-select required [(ngModel)]="equipmentToRegister.type" formControlName="eqType">
+              <mat-option [value]="'PC'">PC</mat-option>
+              <mat-option [value]="'LAPTOP'">Laptop</mat-option>
+              <mat-option [value]="'PHONE'">Phone</mat-option>
+              <mat-option [value]="'OTHER'">Other</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="(equipmentForm.get('eqType').value == null || equipmentForm.get('eqType').value == '' )  && equipmentForm.get('eqType').touched">
+              Select equipment type
+            </mat-error>
+          </mat-form-field>
+          <mat-action-row>
+            <button mat-button color="primary" (click)="addOwner()">Add Owner</button>
+          </mat-action-row>
+        </div>
+
+
+      </mat-expansion-panel>
+
+      <mat-expansion-panel *ngIf="isOwnerNeeded" [expanded]="false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Owner
+          </mat-panel-title>
+          <mat-panel-description>
+            equipment owner
+            <mat-icon>person_add</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div formGroupName="owner">
+
+          <div class="form-element">
+            <mat-form-field appearance="outline">
+              <mat-label>Owner Name</mat-label>
+              <input [(ngModel)]="equipmentToRegister.owner.name" formControlName="eqOwnerName"
+                     name="eqOwnerName" matInput placeholder="Owner Name">
+              <mat-error
+                *ngIf="(equipmentForm.get('owner.eqOwnerName').value == null || equipmentForm.get('owner.eqOwnerName').value == '' )  && equipmentForm.get('owner.eqOwnerName').touched">
+                Owner Name is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-element">
+            <mat-form-field appearance="outline">
+              <mat-label>Owner Last Name</mat-label>
+              <input [(ngModel)]="equipmentToRegister.owner.lastName" formControlName="eqOwnerLastName"
+                     name="eqOwnerLastName" matInput placeholder="Owner Last Name">
+              <mat-error
+                *ngIf="(equipmentForm.get('owner.eqOwnerLastName').value == null || equipmentForm.get('owner.eqOwnerLastName').value == '' )  && equipmentForm.get('owner.eqOwnerLastName').touched">
+                Owner Last Name is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-element">
+            <mat-form-field appearance="outline">
+              <mat-label>Phone Number</mat-label>
+              <input [(ngModel)]="equipmentToRegister.owner.phoneNumber" formControlName="eqOwnerPhoneNumber"
+                     name="eqOwnerPhoneNumber" matInput placeholder="Phone Number">
+              <mat-error
+                *ngIf="(equipmentForm.get('owner.eqOwnerPhoneNumber').value == null || equipmentForm.get('owner.eqOwnerPhoneNumber').value == '' )  && equipmentForm.get('owner.eqOwnerPhoneNumber').touched">
+                Phone Number is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+
+
+        </div>
+
+
+      </mat-expansion-panel>
+
+
+    </mat-accordion>
+
+
+    <div class="submit-button">
+      <button mat-raised-button [disabled]="!equipmentForm.valid" (click)="addEquipment()" color="primary">Register
+      </button>
+    </div>
+
+
+  </form>
+
+
+</div>

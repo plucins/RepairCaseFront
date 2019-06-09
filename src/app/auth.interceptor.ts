@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
     if (this.loginService.isUserAuthorised()) {
 
       if (this.loginService.isTokenExpired()) {
-        // this.loginService.logout();
+        this.loginService.logout();
       }
 
 

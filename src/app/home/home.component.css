@@ -31,3 +31,22 @@ mat-card-actions button {
   width: 100%;
   margin-top: 20px;
 }
+
+h1 {
+  text-align: center;
+}
+
+.form-element {
+  padding: 5px 0;
+}
+
+
+.form-element mat-form-field {
+  width:100% !important;
+}
+
+mat-panel-description, mat-icon {
+  flex-basis: 0;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,6 +1,16 @@
 <div class="container">
   <div class="row">
 
+    <div class="col-12">
+      <div *ngIf="loginService.userRegisterCorrectly && !loginService.isUserAuthorised()" class="alert alert-success alert-dismissible fade show"
+           role="alert">
+        Registered correctly - go to <a routerLink="login">login</a> page to authorize yourself
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+
     <div class="col-12" *ngIf="!loginService.isUserAuthorised()">
       <div class="alert alert-info" role="alert">
         Login or register to see content
@@ -12,6 +22,7 @@
       <div class="icon-nav">
         <i (click)="openCaseDialog()" class="material-icons">add_box</i>
         <i (click)="getAllCases()" class="material-icons">cached</i>
+        <i (click)="openAddEquipmentDialog()"  class="material-icons">add_to_queue</i>
 
         <mat-divider></mat-divider>
       </div>
@@ -46,11 +57,11 @@
               <mat-tab label="Equipment" *ngIf="case.equipment != null">
                 <mat-card-header>
                   <div mat-card-avatar><i class="material-icons">computer</i></div>
-                <mat-card-title> {{case.equipment?.mark}} {{case.equipment?.model}}</mat-card-title>
-                <mat-card-subtitle>(ID: {{case.equipment?.id}})</mat-card-subtitle>
+                  <mat-card-title> {{case.equipment?.mark}} {{case.equipment?.model}}</mat-card-title>
+                  <mat-card-subtitle>(ID: {{case.equipment?.id}})</mat-card-subtitle>
                 </mat-card-header>
                 <p>
-                 Type: {{case?.equipment?.type}}
+                  Type: {{case?.equipment?.type}}
                 </p>
               </mat-tab>
               <mat-tab label="Owner" *ngIf="case.equipment?.owner != null">
@@ -74,12 +85,14 @@
               </mat-tab>
             </mat-tab-group>
 
-            <div class="assign-worker" *ngIf="case?.worker === null" >
+            <div class="assign-worker" *ngIf="case?.worker === null">
               <mat-form-field appearance="outline" class="example-full-width">
                 <mat-label>Worker</mat-label>
-                <input matInput  placeholder="Worker" aria-label="Worker" [matAutocomplete]="auto" [formControl]="stateCtrl">
+                <input matInput placeholder="Worker" aria-label="Worker" [matAutocomplete]="auto"
+                       [formControl]="stateCtrl">
                 <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option *ngFor="let worker of filteredWorkers | async" (click)="assignWorker(case, worker.id)" [value]="worker.name + ' ' + worker.lastName">
+                  <mat-option *ngFor="let worker of filteredWorkers | async" (click)="assignWorker(case, worker.id)"
+                              [value]="worker.name + ' ' + worker.lastName">
                     <span>{{worker.name}} {{worker.lastName}}</span>
                   </mat-option>
                 </mat-autocomplete>
@@ -90,6 +103,11 @@
             <mat-card-actions>
               <mat-divider></mat-divider>
               <button mat-button>EDIT</button>
+              <button mat-button [matMenuTriggerFor]="menu">ADD</button>
+              <mat-menu #menu="matMenu">
+                <button *ngIf="case.worker === null" mat-menu-item>Worker</button>
+                <button *ngIf="case.equipment === null" mat-menu-item>Equipment</button>
+              </mat-menu>
               <button mat-button (click)="updateRepairCase(case)">{{checkStatus(case) | uppercase}}</button>
             </mat-card-actions>
           </mat-card>

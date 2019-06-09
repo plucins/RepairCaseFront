@@ -10,12 +10,12 @@ import {
   MatFormFieldModule,
   MatIconModule,
   MatCardModule,
-  MatDividerModule, MatTabsModule, MatDialog, MatDialogModule, MatAutocompleteModule
+  MatDividerModule, MatTabsModule, MatDialog, MatDialogModule, MatAutocompleteModule, MatSelectModule, MatExpansionModule, MatMenuModule
 } from '@angular/material';
 import { LoginUserComponent } from './login-user/login-user.component';
 import { HeaderComponent } from './header/header.component';
 import {RouterModule, Routes} from '@angular/router';
-import {DialogOverviewExampleDialog, HomeComponent} from './home/home.component';
+import {DialogOverviewExampleDialog, EquipmentDialog, HomeComponent} from './home/home.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthInterceptor} from './auth.interceptor';
@@ -24,8 +24,9 @@ import { RegisterUserComponent } from './register-user/register-user.component';
 
 
 const appRoutes: Routes = [
-  {path: 'login', component: LoginUserComponent},
   {path: '', component: HomeComponent},
+  {path: 'login', component: LoginUserComponent},
+  {path: 'register', component: RegisterUserComponent},
 ];
 
 @NgModule({
@@ -35,6 +36,7 @@ const appRoutes: Routes = [
     HeaderComponent,
     HomeComponent,
     DialogOverviewExampleDialog,
+    EquipmentDialog,
     RegisterUserComponent,
 
   ],
@@ -55,10 +57,14 @@ const appRoutes: Routes = [
     FormsModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
+    MatSelectModule,
+    MatExpansionModule,
+    MatMenuModule,
   ],
 
   entryComponents: [
-    DialogOverviewExampleDialog
+    DialogOverviewExampleDialog,
+    EquipmentDialog
   ],
   providers: [
     MatDialog,
@@ -68,7 +74,8 @@ const appRoutes: Routes = [
       multi: true
     },
     LoginUserComponent,
-    LoginUserService
+    LoginUserService,
+    RegisterUserComponent
   ],
   bootstrap: [AppComponent]
 })

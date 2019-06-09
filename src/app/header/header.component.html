@@ -27,7 +27,7 @@
           </a>
           <div *ngIf="!userService.isUserAuthorised()" class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" routerLink="login">Login</a>
-            <a class="dropdown-item" href="#">Register</a>
+            <a class="dropdown-item" routerLink="register">Register</a>
           </div>
 
           <div *ngIf="userService.isUserAuthorised()" class="dropdown-menu" aria-labelledby="navbarDropdown">

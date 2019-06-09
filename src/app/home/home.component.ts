@@ -4,9 +4,12 @@ import {RepairCase} from '../model/RepairCase';
 import {HttpClient} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {CaseWorker} from '../model/CaseWorker';
-import {FormControl} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {LoginUserService} from '../login-user/login-user.service';
+import {RegisterUserComponent} from '../register-user/register-user.component';
+import {CaseEquipment} from '../model/CaseEquipment';
+import {Owner} from '../model/Owner';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +18,8 @@ import {LoginUserService} from '../login-user/login-user.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public dialog: MatDialog, private httpClient: HttpClient, private loginService: LoginUserService) {
+  constructor(public dialog: MatDialog, private httpClient: HttpClient,
+              private loginService: LoginUserService) {
 
     this.filteredWorkers = this.stateCtrl.valueChanges
       .pipe(
@@ -28,6 +32,7 @@ export class HomeComponent implements OnInit {
   private registerCaseObservable: Observable<RepairCase[]>;
   private workers: CaseWorker[];
   caseToRegister: RepairCase = new RepairCase();
+  equipmentToRegister: CaseEquipment = new CaseEquipment();
   stateCtrl = new FormControl();
   filteredWorkers: Observable<CaseWorker[]>;
 
@@ -56,6 +61,17 @@ export class HomeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.getAllCases();
+
+    });
+  }
+
+  openAddEquipmentDialog(): void {
+    const dialogRef = this.dialog.open(EquipmentDialog, {
+      width: '650px',
+      data: {equipmentToRegister: this.equipmentToRegister}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
 
     });
   }
@@ -89,7 +105,7 @@ export class HomeComponent implements OnInit {
 
   updateRepairCase(repairCase: RepairCase) {
     repairCase.status = this.checkStatus(repairCase);
-    this.httpClient.put<RepairCase>('http://localhost:5000/api/repaircase', repairCase).subscribe( resp => {
+    this.httpClient.put<RepairCase>('http://localhost:5000/api/repaircase', repairCase).subscribe(resp => {
       this.getAllCases();
     });
   }
@@ -121,4 +137,54 @@ export class DialogOverviewExampleDialog {
     });
     this.dialogRef.close();
   }
+}
+
+@Component({
+  selector: 'equipment-dialog',
+  templateUrl: 'equipment-dialog.html',
+  styleUrls: ['./home.component.css']
+})
+export class EquipmentDialog implements OnInit {
+
+  equipmentForm: FormGroup;
+  isOwnerNeeded = false;
+  equipmentToRegister: CaseEquipment = new CaseEquipment();
+
+  constructor(
+    public dialogRef: MatDialogRef<EquipmentDialog>,
+    private http: HttpClient, private formBuilder: FormBuilder) {
+  }
+
+  ngOnInit(): void {
+    this.equipmentForm = this.formBuilder.group({
+      eqMark: [''],
+      eqModel: [''],
+      eqType: [''],
+      owner: this.formBuilder.group({
+        eqOwnerName: [''],
+        eqOwnerLastName: [''],
+        eqOwnerPhoneNumber: ['']
+      })
+    });
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  addOwner() {
+    this.equipmentForm.get('owner.eqOwnerName').setValidators([Validators.required]);
+    this.equipmentForm.get('owner.eqOwnerLastName').setValidators([Validators.required]);
+    this.equipmentForm.get('owner.eqOwnerPhoneNumber').setValidators([Validators.required, Validators.pattern('^([+]?[\\s0-9]+)?(\\d{3}|[(]?[0-9]+[)])?([-]?[\\s]?[0-9])+$')]);
+    this.equipmentToRegister.owner = new Owner();
+    this.isOwnerNeeded = true;
+  }
+
+  addEquipment() {
+    this.http.post<CaseEquipment>('http://localhost:5000/api/equipment', this.equipmentToRegister).subscribe( resp => {
+      console.log(resp);
+    });
+    this.dialogRef.close();
+  }
+
 }
