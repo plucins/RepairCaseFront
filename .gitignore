@@ -1,7 +1,4 @@
 
-# Created by https://www.gitignore.io/api/angular,intellij
-# Edit at https://www.gitignore.io/?templates=angular,intellij
-
 ### Angular ###
 ## Angular ##
 # compiled output
@@ -115,4 +112,3 @@ fabric.properties
 # Sonarlint plugin
 .idea/sonarlint
 
-# End of https://www.gitignore.io/api/angular,intellij
