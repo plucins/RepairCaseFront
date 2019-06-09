@@ -1,0 +1,16 @@
+.container{
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width:80%;
+}
+.submit-button {
+  margin-top: 20px;
+}
+
+.submit-button button {
+  display: block;
+  width: 100%;
+}

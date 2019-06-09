@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Register Repair Case </h1>
+<div mat-dialog-content>
+
+  <form class="example-form">
+
+    <div class="form-group">
+      <mat-form-field appearance="outline" style="width:400px !important;">
+        <mat-label>Title</mat-label>
+        <input required [(ngModel)]="caseToRegister.title" name="title" matInput placeholder="Title">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="outline" style="width:400px !important;">
+        <mat-label>Description</mat-label>
+        <input required [(ngModel)]="caseToRegister.description" name="description" matInput placeholder="Description">
+      </mat-form-field>
+    </div>
+
+    <div class="submit-button">
+      <button mat-raised-button (click)="registerCase()" color="primary">Register</button>
+    </div>
+
+
+  </form>
+
+
+</div>

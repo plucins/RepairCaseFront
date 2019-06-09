@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">Repair Case App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li *ngIf="userService.isUserAuthorised()" class="nav-item active">
+          <a class="nav-link">Register <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+
+
+      <ul class="navbar-nav my-2 my-lg-0">
+        <li class="nav-item dropdown">
+          <a *ngIf="userService.isUserAuthorised()" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+             aria-haspopup="true" aria-expanded="false">
+            <span >{{userService.loggedUser.firstName + ' ' + userService.loggedUser.lastName}}</span>
+          </a>
+
+          <a *ngIf="!userService.isUserAuthorised()" class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown"
+             aria-haspopup="true" aria-expanded="false">
+            <span >Not Authorised</span>
+          </a>
+          <div *ngIf="!userService.isUserAuthorised()" class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" routerLink="login">Login</a>
+            <a class="dropdown-item" href="#">Register</a>
+          </div>
+
+          <div *ngIf="userService.isUserAuthorised()" class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Edit Account</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" (click)="userService.logout()" href="#">Logout</a>
+          </div>
+
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</nav>
+

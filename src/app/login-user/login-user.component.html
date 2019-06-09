@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col-6 offset-3">
+      <mat-card>
+        <mat-card-title>Login</mat-card-title>
+
+        <div style="font-size: 12px" *ngIf="userNotFound" class="alert alert-danger alert-dismissible fade show" role="alert">
+          Pointed email ( {{user.email}} ) and password doesn't match.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <mat-card-content>
+
+
+          <form class="example-form" [formGroup]="loginForm">
+            <div class="form-group">
+              <mat-form-field appearance="outline" style="width:500px !important;">
+                <mat-label>User Email</mat-label>
+                <input required [(ngModel)]="user.email" formControlName="email" name="email" matInput placeholder="User Email" >
+                <mat-error *ngIf="(loginForm.get('email').value == null || loginForm.get('email').value == '' )  && loginForm.get('email').touched">Email is required</mat-error>
+                <mat-error  *ngIf="loginForm.get('email').value != null   && loginForm.get('email').touched">Email doesn't match pattern </mat-error>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="outline" style="width:500px !important;">
+                <mat-label>Password</mat-label>
+                <input required matInput [(ngModel)]="user.password" type="password" formControlName="password" name="password" placeholder="Password">
+                <mat-error *ngIf="(loginForm.get('password').value == null || loginForm.get('password').value == '' )  && loginForm.get('password').touched">Password is required</mat-error>
+                <mat-error *ngIf="(loginForm.get('password').value != null || loginForm.get('password').value != '' )  && loginForm.get('password').touched">Password doesn't match pattern </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="submit-button">
+              <button mat-raised-button color="primary" [disabled]="!loginForm.valid" (click)="login()">Primary</button>
+            </div>
+
+
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

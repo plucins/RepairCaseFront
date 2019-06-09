@@ -1,0 +1,33 @@
+.icon-nav i {
+  margin: 5px;
+}
+
+.example-card {
+  display: inline-block;
+  margin: 5px;
+  width: 260px;
+  height: auto;
+}
+/deep/.mat-tab-label, /deep/.mat-tab-label-active{
+  min-width: 0!important;
+  padding: 3px!important;
+  margin: 2px !important;
+}
+
+mat-card-header {
+  margin-top: 10px;
+}
+
+/deep/.material-icons {
+  cursor:pointer;
+}
+
+mat-card-actions button {
+  margin: 0;
+}
+
+.submit-button button {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+}
