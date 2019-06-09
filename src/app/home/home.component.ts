@@ -21,24 +21,34 @@ export class HomeComponent implements OnInit {
   constructor(public dialog: MatDialog, private httpClient: HttpClient,
               private loginService: LoginUserService) {
 
-    this.filteredWorkers = this.stateCtrl.valueChanges
+    this.filteredWorkers = this.workerControl.valueChanges
       .pipe(
         startWith(''),
-        map(state => state ? this._filterStates(state) : this.workers.slice())
+        map(worker => worker ? this._filterWorkers(worker) : this.workers.slice())
+      );
+
+    this.filteredEq = this.eqControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(eq => eq ? this._filterEq(eq) : this.equipment.slice())
       );
 
   }
 
   private registerCaseObservable: Observable<RepairCase[]>;
   private workers: CaseWorker[];
+  private equipment: CaseEquipment[];
   caseToRegister: RepairCase = new RepairCase();
   equipmentToRegister: CaseEquipment = new CaseEquipment();
-  stateCtrl = new FormControl();
+  workerControl = new FormControl();
+  eqControl = new FormControl();
   filteredWorkers: Observable<CaseWorker[]>;
+  filteredEq: Observable<CaseEquipment[]>;
 
   ngOnInit() {
     this.getAllCases();
     this.getAllWorkers();
+    this.getAllEquipments();
   }
 
 
@@ -49,6 +59,12 @@ export class HomeComponent implements OnInit {
   getAllWorkers(): void {
     this.httpClient.get<CaseWorker[]>('http://localhost:5000/api/worker').subscribe(resp => {
       this.workers = resp;
+    });
+  }
+
+  getAllEquipments(): void {
+    this.httpClient.get<CaseEquipment[]>('http://localhost:5000/api/equipment').subscribe(resp => {
+      this.equipment = resp;
     });
   }
 
@@ -76,11 +92,18 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  private _filterStates(value: string): CaseWorker[] {
+  private _filterWorkers(value: string): CaseWorker[] {
     const filterValue = value.toLowerCase();
 
     return this.workers.filter(worker => worker.name.toLowerCase().indexOf(filterValue) === 0);
   }
+
+  private _filterEq(value: string): CaseEquipment[] {
+    const filterValue = value.toLowerCase();
+
+    return this.equipment.filter(eq => eq.model.toLowerCase().indexOf(filterValue) === 0);
+  }
+
 
   assignWorker(repairCase: RepairCase, workerId: number) {
     repairCase.worker = new CaseWorker();
@@ -88,7 +111,20 @@ export class HomeComponent implements OnInit {
 
     this.httpClient.put<RepairCase>('http://localhost:5000/api/repaircase', repairCase).subscribe(resp => {
       console.log(resp);
+      this.getAllCases();
     });
+
+  }
+
+  assignEq(repairCase: RepairCase, eqId: number) {
+    repairCase.equipment = new CaseEquipment();
+    repairCase.equipment.id = eqId;
+
+    this.httpClient.put<RepairCase>('http://localhost:5000/api/repaircase', repairCase).subscribe(resp => {
+      console.log(resp);
+      this.getAllCases();
+    });
+
   }
 
   checkStatus(repairCase: RepairCase): string {
@@ -108,6 +144,10 @@ export class HomeComponent implements OnInit {
     this.httpClient.put<RepairCase>('http://localhost:5000/api/repaircase', repairCase).subscribe(resp => {
       this.getAllCases();
     });
+  }
+
+  addWorker(repairCase: RepairCase): void {
+    repairCase.addWorker = true;
   }
 
 
@@ -181,7 +221,7 @@ export class EquipmentDialog implements OnInit {
   }
 
   addEquipment() {
-    this.http.post<CaseEquipment>('http://localhost:5000/api/equipment', this.equipmentToRegister).subscribe( resp => {
+    this.http.post<CaseEquipment>('http://localhost:5000/api/equipment', this.equipmentToRegister).subscribe(resp => {
       console.log(resp);
     });
     this.dialogRef.close();

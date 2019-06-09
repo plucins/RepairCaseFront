@@ -71,7 +71,7 @@
                   <mat-card-subtitle>(ID: {{case.equipment?.owner?.id}})</mat-card-subtitle>
                 </mat-card-header>
                 <p>
-                  Type: {{case.equipment?.owner?.phoneNumber}}
+                  Phone Number: {{case.equipment?.owner?.phoneNumber}}
                 </p>
               </mat-tab>
               <mat-tab label="Worker" *ngIf="case.worker != null">
@@ -85,11 +85,25 @@
               </mat-tab>
             </mat-tab-group>
 
-            <div class="assign-worker" *ngIf="case?.worker === null">
+            <div class="assign-worker" *ngIf="case?.equipment === null && !case.equipment" >
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Equipment</mat-label>
+                <input matInput placeholder="Equipment" aria-label="Equipment" [matAutocomplete]="auto"
+                       [formControl]="eqControl">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let eq of filteredEq | async" (click)="assignEq(case, eq.id)"
+                              [value]="eq.mark + ' ' + eq.model">
+                    <span>{{eq.mark}} {{eq.model}} ( {{eq.type}} )</span>
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+            <div class="assign-worker" *ngIf="case?.worker === null && case.addWorker">
               <mat-form-field appearance="outline" class="example-full-width">
                 <mat-label>Worker</mat-label>
                 <input matInput placeholder="Worker" aria-label="Worker" [matAutocomplete]="auto"
-                       [formControl]="stateCtrl">
+                       [formControl]="workerControl">
                 <mat-autocomplete #auto="matAutocomplete">
                   <mat-option *ngFor="let worker of filteredWorkers | async" (click)="assignWorker(case, worker.id)"
                               [value]="worker.name + ' ' + worker.lastName">
@@ -103,9 +117,9 @@
             <mat-card-actions>
               <mat-divider></mat-divider>
               <button mat-button>EDIT</button>
-              <button mat-button [matMenuTriggerFor]="menu">ADD</button>
-              <mat-menu #menu="matMenu">
-                <button *ngIf="case.worker === null" mat-menu-item>Worker</button>
+              <button *ngIf="case.equipment == null || case.worker == null" mat-button [matMenuTriggerFor]="menu">ADD</button>
+              <mat-menu #menu="matMenu" >
+                <button (click)="addWorker(case)" *ngIf="case.worker === null" mat-menu-item>Worker</button>
                 <button *ngIf="case.equipment === null" mat-menu-item>Equipment</button>
               </mat-menu>
               <button mat-button (click)="updateRepairCase(case)">{{checkStatus(case) | uppercase}}</button>

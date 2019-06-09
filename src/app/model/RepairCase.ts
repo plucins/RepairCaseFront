@@ -10,4 +10,6 @@ export class  RepairCase {
   registrationTime: string;
   lastUpdate: string;
   equipment: CaseEquipment;
+  addWorker = false;
+  addEquipment = false;
 }
