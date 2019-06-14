@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, Injectable, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {RepairCase} from '../model/RepairCase';
 import {HttpClient} from '@angular/common/http';
@@ -26,13 +26,6 @@ export class HomeComponent implements OnInit {
         startWith(''),
         map(worker => worker ? this._filterWorkers(worker) : this.workers.slice())
       );
-
-    this.filteredEq = this.eqControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(eq => eq ? this._filterEq(eq) : this.equipment.slice())
-      );
-
   }
 
   private registerCaseObservable: Observable<RepairCase[]>;
@@ -48,7 +41,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getAllCases();
     this.getAllWorkers();
-    this.getAllEquipments();
+    this.filterEq();
   }
 
 
@@ -66,6 +59,15 @@ export class HomeComponent implements OnInit {
     this.httpClient.get<CaseEquipment[]>('http://localhost:5000/api/equipment').subscribe(resp => {
       this.equipment = resp;
     });
+  }
+
+  filterEq(): void {
+    this.getAllEquipments();
+    this.filteredEq = this.eqControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(eq => eq ? this._filterEq(eq) : this.equipment.slice())
+      );
   }
 
 
@@ -148,6 +150,10 @@ export class HomeComponent implements OnInit {
 
   addWorker(repairCase: RepairCase): void {
     repairCase.addWorker = true;
+  }
+
+  addEquipment(repairCase: RepairCase): void {
+    repairCase.addEquipment = true;
   }
 
 

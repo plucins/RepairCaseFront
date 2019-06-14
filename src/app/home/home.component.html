@@ -85,10 +85,10 @@
               </mat-tab>
             </mat-tab-group>
 
-            <div class="assign-worker" *ngIf="case?.equipment === null && !case.equipment" >
+            <div class="assign-worker" *ngIf="case.equipment === null && case.addEquipment" >
               <mat-form-field appearance="outline" class="example-full-width">
                 <mat-label>Equipment</mat-label>
-                <input matInput placeholder="Equipment" aria-label="Equipment" [matAutocomplete]="auto"
+                <input (click)="filterEq()" matInput placeholder="Equipment" aria-label="Equipment" [matAutocomplete]="auto"
                        [formControl]="eqControl">
                 <mat-autocomplete #auto="matAutocomplete">
                   <mat-option *ngFor="let eq of filteredEq | async" (click)="assignEq(case, eq.id)"
@@ -120,7 +120,7 @@
               <button *ngIf="case.equipment == null || case.worker == null" mat-button [matMenuTriggerFor]="menu">ADD</button>
               <mat-menu #menu="matMenu" >
                 <button (click)="addWorker(case)" *ngIf="case.worker === null" mat-menu-item>Worker</button>
-                <button *ngIf="case.equipment === null" mat-menu-item>Equipment</button>
+                <button (click)="addEquipment(case)" *ngIf="case.equipment === null" mat-menu-item>Equipment</button>
               </mat-menu>
               <button mat-button (click)="updateRepairCase(case)">{{checkStatus(case) | uppercase}}</button>
             </mat-card-actions>
